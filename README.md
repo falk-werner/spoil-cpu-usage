@@ -4,7 +4,7 @@ This repository contains a tool used to spoil CPU usage computation
 on linux system with RT_PREEMPT patch enabled.
 
 
-<video controls >
+<video controls width="250">
   <source src="doc/htop.webm" type="video/webm" />
 </video>
 
