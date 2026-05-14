@@ -3,10 +3,7 @@
 This repository contains a tool used to spoil CPU usage computation
 on linux system with RT_PREEMPT patch enabled.
 
-
-<video controls >
-  <source src="doc/htop.webm" type="video/webm" />
-</video>
+![htop](doc/htop.gif)
 
 ## Build
 
