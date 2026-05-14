@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.28)
+project(spoil-cpu-usage)
+
+add_executable(spoil_cpu_usage src/spoil_cpu_usage.c)
+install(TARGETS spoil_cpu_usage)
