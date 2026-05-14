@@ -6,3 +6,6 @@ install(TARGETS spoil_cpu_usage)
 
 add_executable(show_cpu_usage src/show_cpu_usage.c)
 install(TARGETS show_cpu_usage)
+
+add_executable(show_cpu_usage_cgroups src/show_cpu_usage_cgroups.c)
+install(TARGETS show_cpu_usage_cgroups)
