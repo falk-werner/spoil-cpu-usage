@@ -3,3 +3,6 @@ project(spoil-cpu-usage)
 
 add_executable(spoil_cpu_usage src/spoil_cpu_usage.c)
 install(TARGETS spoil_cpu_usage)
+
+add_executable(show_cpu_usage src/show_cpu_usage.c)
+install(TARGETS show_cpu_usage)
