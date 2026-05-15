@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
     struct cpu_usage usage;
     get_cpu_usage(&usage);
 
+    printf("\x1b[2J\x1b[HCPU Usage using /proc/stat\n");
     for(;;)
     {
         sleep(1);
@@ -110,7 +111,7 @@ int main(int argc, char* argv[])
         uint64_t const total = next.total - usage.total;
         uint64_t const idle = next.idle - usage.idle;
         
-        printf("cpu usage: %" PRIu64 "%%\n", 100 - ((idle * 100UL) / total));
+        printf("cpu usage: %" PRIu64 "%%  \n\n\x1b[2;0H", 100 - ((idle * 100UL) / total));
         usage.total = next.total;
         usage.idle = next.idle;
     }
