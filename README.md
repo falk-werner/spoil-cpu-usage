@@ -17,13 +17,31 @@ cmake --build build
 There is a good description of the problem available at https://docs.kernel.org/admin-guide/cpu-load.html.
 Following this, all tools that measure CPU usage using `/proc/stat` such as `htop` may display incorrect values.
 
-## Solution
+## Other Ideas
+
+### cgroup v1
 
 ![cgroups](doc/cgroups.gif)
 
-The solution is to use cgroups instead.
+
+> ![NOTE]
+> cpuacct was removed in cgroup v2
+
+## Status Quo
+
+No solution yet. All investigated mechanism have pitfalls:
+
+- `/proc/stat` is not reliable as shown above.
+- `cgroup v1 cpuacct` seams promissing, but was removed in `cgroup v2`.
+- `cgroup v2` do not take realtime process into account until they are rinning in the root group.  
+  (see https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu)
+- `/proc/schedsat` may be correct, but there are (yet unconfirmed) voices that see security issues due to information leakage and state that `/proc/schedstat` consumes 1-2% of CPU usage when enabled.
 
 ## References
 
 - https://docs.kernel.org/admin-guide/cpu-load.html
 - https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/resource_management_guide/sec-cpuacct
+- https://www.man7.org/linux/man-pages/man7/cgroups.7.html
+- https://docs.kernel.org/admin-guide/cgroup-v1/cgroups.html
+- https://docs.kernel.org/admin-guide/cgroup-v2.html
+- https://docs.kernel.org/scheduler/sched-stats.html
