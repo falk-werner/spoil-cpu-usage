@@ -3,7 +3,7 @@
 This repository contains a tool used to spoil CPU usage computation
 on linux system with RT_PREEMPT patch enabled.
 
-![htop](doc/htop.gif)
+![CPU usage](doc/cpu_usage.gif)
 
 ## Build
 
@@ -24,20 +24,49 @@ Following this, all tools that measure CPU usage using `/proc/stat` such as `hto
 ![cgroups](doc/cgroups.gif)
 
 
-> ![NOTE]
+> [!NOTE]
 > cpuacct was removed in cgroup v2
 
-## Status Quo
+## Notes on /proc/schedstat
 
-No solution yet. All investigated mechanism have pitfalls:
+In order to enable `/proc/schedstat` the kernel option `CONFIG_SCHEDSTATS=y` must active.
 
-- `/proc/stat` is not reliable as shown above.
-- `cgroup v1 cpuacct` seams promissing, but was removed in `cgroup v2`.
-- `cgroup v2` do not take realtime process into account until they are rinning in the root group.  
-  (see https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu)
-- `/proc/schedsat` may be correct, but there are (yet unconfirmed) voices that see security issues due to information leakage and state that `/proc/schedstat` consumes 1-2% of CPU usage when enabled.  
-  (some refernces are provided below, most of them they not mention /proc/schedstat directly, but /proc in general)
-  - the visibility of can be limited using `chmod 0400 /proc/schedstat`
+Some docs suggest to also enable scheduler statistics at runtime using the following command:
+
+```bash
+sudo sysctl -w kernel.sched_schedstats=1
+```
+
+But, as observation shows, this is not necessary to gather basic CPU usage information. The
+required field #7 of `/proc/schedstat` is updated even if `kernel.sched_schedstats=0` is
+set _(not sure if this is true for all linux system / kernel versions)_.
+
+### Security Considerations
+
+> [!NOTE]
+> There is some criticism about `/proc/schedstat` when it is used in security-aware environments.
+
+The source of this criticism are papers about side channel attacs. Some of them are linked below
+for reference. Note that those papers use various information exposed by `/proc` filesystem. In
+fact, `/proc/schedstat` is only mentioned in very few of them directrly and only as side note.
+
+If security is a need, there is more required than disabling `/proc/schedstat`, e.g. use the
+mount option `hidepid=2` when mounting the `/proc` filesystem.
+
+In order to prevent other users than root to see the contents of `/proc/schedstat` a start script
+can change the visibility of the file on bootup.
+
+```bash
+chmod 0400 /proc/schedstat
+```
+
+### Runtime Overhead
+
+There are voices _(not confirmed yet, since there is no clear reference found yet)_ that
+`/proc/schedstat` comes with a runtime overhead of 1-2% CPU usage.
+
+This overhead occurs when `kernel.sched_schedstats` is set to 1, which may not be necessary as
+stated above.
 
 ## References
 
@@ -46,10 +75,14 @@ No solution yet. All investigated mechanism have pitfalls:
 - https://www.man7.org/linux/man-pages/man7/cgroups.7.html
 - https://docs.kernel.org/admin-guide/cgroup-v1/cgroups.html
 - https://docs.kernel.org/admin-guide/cgroup-v2.html
+- https://www.kernel.org/doc/html/latest/filesystems/proc.html
+
+### /proc/schedstat related
+
 - https://docs.kernel.org/scheduler/sched-stats.html
-- https://gruss.cc/files/procharvester.pdf
 - https://www.kernel.org/doc/html/v6.2/security/self-protection.html
 - https://www.kicksecure.com/wiki/Security-misc
-- https://www.kernel.org/doc/html/latest/filesystems/proc.html
+- https://gruss.cc/files/procharvester.pdf
 - https://vmonaco.com/papers/SoK-%20Keylogging%20Side%20Channels.pdf
 - https://yinqian.org/papers/ccs15.pdf
+

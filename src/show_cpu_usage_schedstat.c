@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
             uint64_t const usage_ns = end.usage_ns[cpu] - start.usage_ns[cpu];
             uint64_t const time_ns = end.timestamp_ns - start.timestamp_ns;
             uint64_t const usage = (usage_ns * 100UL) / time_ns;
-            printf("CPU #%zu: %" PRIu64 "%%  \n", usage);
+            printf("CPU #%zu: %" PRIu64 "%%  \n", cpu, usage);
         }
         printf("\n\x1b[2;0H");
 
