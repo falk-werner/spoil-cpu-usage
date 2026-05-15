@@ -35,7 +35,8 @@ No solution yet. All investigated mechanism have pitfalls:
 - `cgroup v1 cpuacct` seams promissing, but was removed in `cgroup v2`.
 - `cgroup v2` do not take realtime process into account until they are rinning in the root group.  
   (see https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu)
-- `/proc/schedsat` may be correct, but there are (yet unconfirmed) voices that see security issues due to information leakage and state that `/proc/schedstat` consumes 1-2% of CPU usage when enabled.
+- `/proc/schedsat` may be correct, but there are (yet unconfirmed) voices that see security issues due to information leakage and state that `/proc/schedstat` consumes 1-2% of CPU usage when enabled.  
+  (some refernces are provided below, but they not mention /proc/schedstat directly, but /proc in general)
 
 ## References
 
@@ -45,3 +46,6 @@ No solution yet. All investigated mechanism have pitfalls:
 - https://docs.kernel.org/admin-guide/cgroup-v1/cgroups.html
 - https://docs.kernel.org/admin-guide/cgroup-v2.html
 - https://docs.kernel.org/scheduler/sched-stats.html
+- https://gruss.cc/files/procharvester.pdf
+- https://www.kernel.org/doc/html/v6.2/security/self-protection.html
+- https://www.kicksecure.com/wiki/Security-misc
