@@ -9,3 +9,6 @@ install(TARGETS show_cpu_usage)
 
 add_executable(show_cpu_usage_cgroups src/show_cpu_usage_cgroups.c)
 install(TARGETS show_cpu_usage_cgroups)
+
+add_executable(show_cpu_usage_schedstat src/show_cpu_usage_schedstat.c)
+install(TARGETS show_cpu_usage_schedstat)
